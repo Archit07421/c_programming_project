@@ -2,6 +2,7 @@
 #include<time.h>
 #include<ctype.h>
 #include<string.h>
+#include <stdlib.h> 
 
 int count_words(const char *str){  
    int count=0;
@@ -26,46 +27,51 @@ int count_words(const char *str){
 }
 
 int main() {
-    const char *easy_prompt = {
-        "Typing is a skill that grows stronger with small steps taken every day. "
-        // "When you begin, your fingers move slowly, searching for keys one by one, "
-        // "but with gentle practice something begins to change. Your hands start to remember movements, "
-        // "your eyes glide over the text more naturally, and your thoughts connect smoothly with the keyboard. "
-        // "Soon typing feels less like effort and more like a flowing rhythm. "
-        // "Even a few minutes of practice build improvement, confidence rises, and mistakes slowly fade away. "
-        // "Typing is not about perfection — it is about consistency and patience. "
-        // "The more you type, the more natural language becomes through your fingertips.",
+    const char *easy_prompt[] = {
+        "Typing is a skill that grows stronger with small steps taken every day. ",
+        "When you begin, your fingers move slowly, searching for keys one by one. ",
+        "but with gentle practice something begins to change. Your hands start to remember movements ",
+        "your eyes glide over the text more naturally, and your thoughts connect smoothly with the keyboard. ",
+        "Soon typing feels less like effort and more like a flowing rhythm. ",
+        "Even a few minutes of practice build improvement, confidence rises, and mistakes slowly fade away. ",
+        "Typing is not about perfection — it is about consistency and patience. ",
+        "The more you type, the more natural language becomes through your fingertips.",
 
-        // "Learning to type is like learning to ride a bicycle — uncertain at first but rewarding later. "
-        // "Every day your fingers learn a bit more, your speed increases, and typing becomes automatic. "
-        // "Soon you write messages faster, complete homework quicker, and express ideas clearly. "
-        // "Typing is a tool of creativity and communication, useful for school, work, and life. "
-        // "With discipline and practice, typing becomes a lifelong skill."
+        "Learning to type is like learning to ride a bicycle — uncertain at first but rewarding later. ",
+        "Every day your fingers learn a bit more, your speed increases, and typing becomes automatic. ",
+        "Soon you write messages faster, complete homework quicker, and express ideas clearly. ",
+        "Typing is a tool of creativity and communication, useful for school, work, and life. ",
+        "With discipline and practice, typing becomes a lifelong skill."
     };
 
-    const char *medium_prompt = {
-        "Typing efficiently is not just moving fingers across keys; it is a collaboration between muscle memory and thought. "
-        // "In the early stages each keypress is deliberate, but repetition forms pathways that allow words to appear effortlessly. "
-        // "Accuracy strengthens, rhythm forms, and typing becomes an instinct. Eventually you focus on ideas rather than keys, "
-        // "and sentences expand naturally. With practice typing becomes both mental and physical training, sharpening thought "
-        // "while improving communication and productivity.",
+    const char *medium_prompt[] = {
+        "Typing efficiently is not just moving fingers across keys; it is a collaboration between muscle memory and thought. ",
+        "In the early stages each keypress is deliberate, but repetition forms pathways that allow words to appear effortlessly. ",
+        "Accuracy strengthens, rhythm forms, and typing becomes an instinct. Eventually you focus on ideas rather than keys, ",
+        "and sentences expand naturally. With practice typing becomes both mental and physical training, sharpening thought ",
+        "while improving communication and productivity.",
 
-        // "Modern communication lives through typing. When your fingers know the keyboard, your mind is free — "
-        // "ideas flow without interruption. Assignments complete faster, writing becomes clearer, and creativity grows. "
-        // "Typing is more than pressing keys — it is shaping language with rhythm, speed, and precision. "
-        // "Every paragraph improves tomorrow's ability."
+        "Modern communication lives through typing. When your fingers know the keyboard, your mind is free — ",
+        "ideas flow without interruption. Assignments complete faster, writing becomes clearer, and creativity grows. ",
+        "Typing is more than pressing keys — it is shaping language with rhythm, speed, and precision. ",
+        "Every paragraph improves tomorrow's ability."
     };
 
-    const char *hard_prompt = {
-        "Typing mastery represents a sophisticated integration of perception, coordination, memory, and linguistic reasoning. "
-        // "At high levels the typist no longer thinks about keys or even words; ideas flow directly into structured language. "
-        // "Neural pathways strengthen, cognitive load decreases, and keystrokes become automatic. "
-        // "True mastery appears when clarity remains even at high speed — when intention becomes text with elegant precision.",
+    const char *hard_prompt[] = {
+        "Typing mastery represents a sophisticated integration of perception, coordination, memory, and linguistic reasoning. ",
+        "At high levels the typist no longer thinks about keys or even words; ideas flow directly into structured language. ",
+        "Neural pathways strengthen, cognitive load decreases, and keystrokes become automatic. ",
+        "True mastery appears when clarity remains even at high speed — when intention becomes text with elegant precision.",
 
-        // "Expert typing synchronizes cognition with movement. Every sentence reflects countless micro-decisions processed instantly. "
-        // "The fingers respond like instruments guided by thought. Mistakes are not failure but feedback, shaping precision over time. "
-        // "Eventually awareness moves from keystrokes to ideas — typing becomes a channel through which language flows."
+        "Expert typing synchronizes cognition with movement. Every sentence reflects countless micro-decisions processed instantly. ",
+        "The fingers respond like instruments guided by thought. Mistakes are not failure but feedback, shaping precision over time. ",
+        "Eventually awareness moves from keystrokes to ideas — typing becomes a channel through which language flows."
     };
+
+    int easy_count = sizeof(easy_prompt)/sizeof(easy_prompt[0]);
+    int medium_count = sizeof(medium_prompt)/sizeof(medium_prompt[0]);
+    int hard_count = sizeof(hard_prompt)/sizeof(hard_prompt[0]);
+
     const char *prompt = NULL;
     char input[1024];
     int choice;
@@ -85,19 +91,21 @@ int main() {
     // Clear leftover newline from buffer after scanf
     getchar();
 
+    srand(time(NULL));
+
     switch (choice) {
         case 1:
-            prompt = easy_prompt;
+            prompt = easy_prompt[rand() % easy_count];
             break;
         case 2:
-            prompt = medium_prompt;
+            prompt = medium_prompt[rand() % medium_count];
             break;
         case 3:
-            prompt = hard_prompt;
+            prompt = hard_prompt[rand() % hard_count];
             break;
         default:
             printf("Invalid choice. Defaulting to Easy mode.\n");
-            prompt = easy_prompt;
+            prompt = easy_prompt[rand() % easy_count];
             break;
     }
 

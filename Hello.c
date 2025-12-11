@@ -26,6 +26,35 @@ int count_words(const char *str){
    return count;
 }
 
+int calculate_accuracy_simple(const char *prompt, const char *input, int *errors) {
+    int i = 0;
+    int correct_chars = 0;
+    *errors = 0;
+
+    int n_prompt = (int)strlen(prompt);
+    int n_input = (int)strlen(input);
+    int n_min = n_prompt < n_input ? n_prompt : n_input;
+
+    for (i = 0; i < n_min; ++i) {
+        if (prompt[i] == input[i]) {
+            correct_chars++;
+        } else {
+            (*errors)++;
+        }
+    }
+
+    // Any leftover characters are errors (missing or extra)
+    if (n_prompt > n_min) {
+        (*errors) += (n_prompt - n_min); // missing chars from input
+    } else if (n_input > n_min) {
+        (*errors) += (n_input - n_min); // extra chars typed
+    }
+
+    return correct_chars;
+}
+
+
+
 int main() {
     const char *easy_prompt[] = {
         "Typing is a skill that grows stronger with small steps taken every day. ",
@@ -75,6 +104,7 @@ int main() {
     const char *prompt = NULL;
     char input[1024];
     int choice;
+    
 
    printf("Typing Speed Test (simple version)\n");
     printf("----------------------------------\n");
@@ -109,8 +139,15 @@ int main() {
             break;
     }
 
-    printf("\nYou selected: %s\n\n", 
-           (choice == 1) ? "Easy" : (choice == 2) ? "Medium" : "Hard");
+    switch (choice) {
+        case 1: printf("\nYou selected: Easy\n\n"); 
+                break;
+        case 2: printf("\nYou selected: Medium\n\n"); 
+                break;
+        case 3: printf("\nYou selected: Hard\n\n"); 
+                break;
+        default: printf("\nInvalid number\n\n");
+    }
 
     printf("Type the following text and press ENTER:\n\n");
    printf("\033[36m%s\033[0m\n\n", prompt);
@@ -131,9 +168,31 @@ int main() {
         return 1;
     }
 
+      size_t len = strlen(input);
+    while (len > 0 && (input[len-1] == '\n' || input[len-1] == '\r')) {
+        input[len-1] = '\0';
+        len--;
+    }
+
     
     // End timer
     time_t end = time(NULL);
+
+   int errors = 0;
+    int correct_chars = calculate_accuracy_simple(prompt, input, &errors);
+    int total_prompt_chars = (int)strlen(prompt);
+    double accuracy = 0.0;
+    if (total_prompt_chars > 0) {
+        accuracy = (double)correct_chars / (double)total_prompt_chars * 100.0;
+    }
+
+    printf("\nCorrect characters: %d\n", correct_chars);
+    printf("Errors: %d\n", errors);
+    printf("Accuracy: %.2f%%\n", accuracy);
+
+   
+
+
 
     // Calculate time taken in seconds
     double seconds = difftime(end, start);
